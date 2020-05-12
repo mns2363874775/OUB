@@ -1,6 +1,6 @@
+[![Build Status](https://travis-ci.com/abhinavshinde/OUB.svg?branch=sql-extended)](https://travis-ci.com/abhinavshinde/OUB)
 
-
-# Project OUB
+# Project OpenUserBot
 
 
 
