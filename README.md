@@ -2,7 +2,7 @@
 
 # Project OpenUserBot
 
-![logo](https://telegra.ph/file/10ffd4cd2d563df8c5209.jpg)
+<p align="center">![logo](https://telegra.ph/file/10ffd4cd2d563df8c5209.jpg)</p>
 
 ```
 #include <std/disclaimer.h>
