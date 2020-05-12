@@ -1,8 +1,4 @@
-[![Build Status](https://travis-ci.com/abhinavshinde/OUB.svg?branch=sql-extended)](https://travis-ci.com/abhinavshinde/OUB)
-
 # Project OpenUserBot
-
-![logo](https://telegra.ph/file/10ffd4cd2d563df8c5209.jpg)
 
 ```
 #include <std/disclaimer.h>
