@@ -1,9 +1,8 @@
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
-# Licensed under the Raphielscape Public License, Version 1.c (the "License");
+# Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
-# thanks to penn5 for bug fixing
 """ Userbot initialization. """
 
 import os
@@ -11,16 +10,23 @@ import os
 from sys import version_info
 from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
-from pymongo import MongoClient
-from redis import StrictRedis
+
 from pylast import LastFMNetwork, md5
 from pySmartDL import SmartDL
+from pymongo import MongoClient
+from redis import StrictRedis
 from dotenv import load_dotenv
 from requests import get
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 
 load_dotenv("config.env")
+
+CMD_LIST = {}
+# for later purposes
+CMD_HELP = {}
+INT_PLUG = ""
+LOAD_PLUG = {}
 
 # Bot Logs setup:
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
@@ -55,10 +61,7 @@ if CONFIG_CHECK:
 API_KEY = os.environ.get("API_KEY", None)
 API_HASH = os.environ.get("API_HASH", None)
 
-# Photo Chat - Get this value from http://antiddos.systems
-API_TOKEN = os.environ.get("API_TOKEN", None)
-API_URL = os.environ.get("API_URL", "http://antiddos.systems")    
-    
+
 # Userbot Session String
 STRING_SESSION = os.environ.get("STRING_SESSION", None)
 
@@ -84,7 +87,7 @@ GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
 # Custom (forked) repo URL for updater.
 UPSTREAM_REPO_URL = os.environ.get(
     "UPSTREAM_REPO_URL",
-    "https://github.com/mkaraniya/OpenUserBot.git")
+    "https://github.com/sahyam2019/oub-remix.git")
 
 # Console verbose logging
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
@@ -92,8 +95,6 @@ CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 # SQL Database URI
 DB_URI = os.environ.get("DATABASE_URL", None)
 
-# For MONGO based DataBase
-MONGO_URI = os.environ.get("MONGO_URI", None)
 
 # OCR API key
 OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
@@ -112,11 +113,18 @@ WEATHER_DEFCITY = os.environ.get("WEATHER_DEFCITY", None)
 # Lydia API
 LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
 
-# set blacklist_chats where you do not want userbot's features
-UB_BLACK_LIST_CHAT = os.environ.get("UB_BLACK_LIST_CHAT", "")
-
 # Telegraph 
 TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", None)
+
+# For MONGO based DataBase
+MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
+
+#Screenshot_layer
+SCREENSHOT_LAYER_ACCESS_KEY = os.environ.get("SCREENSHOT_LAYER_ACCESS_KEY",
+                                             None)
+
+# set blacklist_chats where you do not want userbot's features
+UB_BLACK_LIST_CHAT = os.environ.get("UB_BLACK_LIST_CHAT", "")
     
 # Anti Spambot Config
 ANTI_SPAMBOT = sb(os.environ.get("ANTI_SPAMBOT", "False"))
@@ -132,10 +140,10 @@ ALIVE_NAME = os.environ.get("ALIVE_NAME", None)
 COUNTRY = str(os.environ.get("COUNTRY", ""))
 TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
 
-TERM_ALIAS = os.environ.get("TERM_ALIAS", "OUB")
-
 # Clean Welcome
 CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME", "True"))
+
+TERM_ALIAS = os.environ.get("TERM_ALIAS", "oub-remix")
 
 # Last.fm Module
 BIO_PREFIX = os.environ.get("BIO_PREFIX", None)
@@ -167,9 +175,15 @@ GENIUS_API_TOKEN = os.environ.get("GENIUS", None)
 # Genius lyrics get this value from https://genius.com/developers both has same values
 GENIUS = os.environ.get("GENIUS_API_TOKEN", None)
 
+# Quotes API Token
+QUOTES_API_TOKEN = os.environ.get("QUOTES_API_TOKEN", None)
+
+# Photo Chat - Get this value from http://antiddos.systems
+API_TOKEN = os.environ.get("API_TOKEN", "15e05de0-0357-4553-b39c-d614443ed91e")
+API_URL = os.environ.get("API_URL", "http://antiddos.systems") 
 
 # Init Mongo
-MONGOCLIENT = MongoClient(MONGO_URI, 27017, serverSelectionTimeoutMS=1)
+MONGOCLIENT = MongoClient(MONGO_DB_URI, 27017, serverSelectionTimeoutMS=1)
 MONGO = MONGOCLIENT.userbot
 
 
@@ -193,6 +207,11 @@ def is_redis_alive():
         return True
     except BaseException:
         return False
+    
+
+
+
+
 
 
 # Setting Up CloudMail.ru and MEGA.nz extractor binaries,
@@ -258,8 +277,8 @@ with bot:
 COUNT_MSG = 0
 USERS = {}
 COUNT_PM = {}
-LASTMSG = {}
 ENABLE_KILLME = True
+LASTMSG = {}
 CMD_HELP = {}
 ISAFK = False
 AFKREASON = None
